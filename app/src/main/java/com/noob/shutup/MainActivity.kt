@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-
             ShutupTheme {
                 
                 var btnLabel by remember { mutableStateOf("mute") }
@@ -96,17 +95,17 @@ class MainActivity : ComponentActivity() {
 
                             // toggle mute mode
                             if(audioManager.ringerMode == AudioManager.RINGER_MODE_VIBRATE){
-                                btnLabel = "restore"
                                 audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
                                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, preMusicVolume, 0)
                                 audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, preNotificationVolume, 0)
-                            }else{
                                 btnLabel = "mute"
+                            }else{
                                 audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
                                 // set media volume to zero
                                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0)
                                 // mute the notification and system sound
                                 audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0)
+                                btnLabel = "restore"
                             }
                         },
                         modifier = Modifier.size(width = 140.dp, height = 50.dp)
