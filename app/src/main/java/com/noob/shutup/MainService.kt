@@ -1,7 +1,5 @@
 package com.noob.shutup
 
-import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
@@ -15,10 +13,12 @@ class MainService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
+        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
         val sharedPreferences = this.getSharedPreferences("shutup", Context.MODE_PRIVATE)
-        var preMusicVolume = sharedPreferences.getInt("preMusicVolume", 5)
-        var preRingVolume = sharedPreferences.getInt("preRingVolume", 5)
-        var preNotificationVolume  = sharedPreferences.getInt("preNotificationVolume", 5)
+        var preMusicVolume = sharedPreferences.getInt("preMusicVolume", audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
+        var preRingVolume = sharedPreferences.getInt("preRingVolume", audioManager.getStreamVolume(AudioManager.STREAM_RING))
+        var preNotificationVolume  = sharedPreferences.getInt("preNotificationVolume", audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION))
 
         val notificationManager = getSystemService(NotificationManager::class.java)
 
@@ -30,9 +30,6 @@ class MainService : Service() {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent)
         }
-
-        //val audioManager = getSystemService(AudioManager::class.java)
-        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         if (audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL){
             preMusicVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
