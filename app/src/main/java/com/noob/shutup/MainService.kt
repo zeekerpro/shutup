@@ -15,10 +15,17 @@ class MainService : Service() {
 
         val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
+        var defaultMusicVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+        if(defaultMusicVolume == 0){defaultMusicVolume = 5}
+        var defaultRingVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING)
+        if (defaultRingVolume == 0){defaultRingVolume = 5}
+        var defaultNotificationVolume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
+        if (defaultNotificationVolume == 0){defaultNotificationVolume = 5}
+
         val sharedPreferences = this.getSharedPreferences("shutup", Context.MODE_PRIVATE)
-        var preMusicVolume = sharedPreferences.getInt("preMusicVolume", audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
-        var preRingVolume = sharedPreferences.getInt("preRingVolume", audioManager.getStreamVolume(AudioManager.STREAM_RING))
-        var preNotificationVolume  = sharedPreferences.getInt("preNotificationVolume", audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION))
+        var preMusicVolume = sharedPreferences.getInt("preMusicVolume", defaultMusicVolume)
+        var preRingVolume = sharedPreferences.getInt("preRingVolume", defaultRingVolume)
+        var preNotificationVolume  = sharedPreferences.getInt("preNotificationVolume", defaultNotificationVolume)
 
         val notificationManager = getSystemService(NotificationManager::class.java)
 
